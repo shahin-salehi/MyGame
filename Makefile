@@ -3,4 +3,4 @@ GAMENAME = game
 
 # not sure I understand this line
 all : $(GAMEFILE)
-		g++ -o $(GAMENAME) $(GAMEFILE) `pkg-config sdl3 --cflags --libs` 
+		g++ ./keyboard/keyboard.cpp $(GAMEFILE) -o $(GAMENAME) `pkg-config sdl3 --cflags --libs` 

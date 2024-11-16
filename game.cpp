@@ -4,6 +4,7 @@
 #include <SDL3/SDL_main.h>
 // this allows us to follow a different main pattern that helps with init, iterate, and finish
 #include <SDL3/SDL.h>
+#include "keyboard/keyboard.h"
 #include <iostream>
 
 /*  Define window variables */
@@ -42,6 +43,9 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event){
     //check quit event
     if (event->type == SDL_EVENT_QUIT){
         return SDL_APP_SUCCESS; /* end the program, report success to OS */
+    }
+    if (event->type == SDL_EVENT_KEY_DOWN){
+        return handle_key_event(event->key.scancode);
     }
     return SDL_APP_CONTINUE; /* carry on with program*/
 }
