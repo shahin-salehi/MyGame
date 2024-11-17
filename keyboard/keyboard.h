@@ -4,5 +4,4 @@
 #include "SDL3/SDL.h"
 
 SDL_AppResult handle_key_event(SDL_Scancode key_code);
-
 #endif

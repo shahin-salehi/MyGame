@@ -6,13 +6,28 @@
 #include <SDL3/SDL.h>
 #include "keyboard/keyboard.h"
 #include <iostream>
+#include <string>
 
 /*  Define window variables */
-static SDL_Window *window = NULL;
-static SDL_Renderer *renderer = NULL;
+//static SDL_Window *window = NULL;
+//static SDL_Renderer *renderer = NULL;
 // static ties these variables only to this file and not others who inherit it
-static const int width = 640;
-static const int height = 480;
+static const int width = 1080;
+static const int height = 720;
+
+/*player context*/
+/* initialize send addr to keyboard? */
+typedef struct {
+    std::string name;
+    int xpos;
+    int ypos;
+} PlayerContext; 
+
+typedef struct {
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    PlayerContext player_context;
+} AppState;
 
 /*
 * This program runs once at startup 
@@ -28,10 +43,21 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]){
         return SDL_APP_FAILURE;
     }
 
-    if (!SDL_CreateWindowAndRenderer("Shahin's Game", width, height, 0, &window, &renderer)){
+    /* appstate */
+    AppState *as = new AppState;
+    if(!as){
+        return SDL_APP_FAILURE;
+    }
+    // point appstate to our appstate
+    *appstate = as;
+
+    if (!SDL_CreateWindowAndRenderer("Shahin's Game", width, height, 0, &as->window, &as->renderer)){
         SDL_Log("Couldn't create window/renderer: %s", SDL_GetError());
         return SDL_APP_FAILURE;
     }
+
+    // Init our character
+    as->player_context = {"shahin", 250, 250};
 
     return SDL_APP_CONTINUE;
 }
@@ -55,20 +81,30 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event){
 * hopefully at the refreshrate of the program that has been decided. 
 */
 SDL_AppResult SDL_AppIterate(void *appstate){
-    const double now = ((double)SDL_GetTicks()) / 1000.0;
-    /* choose the color the frame will draw. The sine wave trick makes it fade smoothly*/
-    const float red = (float) (0.5 + 0.5 * SDL_sin(now));
-    const float green = (float) (0.5 + 0.5 * SDL_sin(now + SDL_PI_D * 2/3)); 
-    const float blue = (float) (0.5 + 0.5 * SDL_sin(now + SDL_PI_D * 4/3));
-
-    /* Takes pointer to renderer and colors it with our defined colors  */
-    SDL_SetRenderDrawColorFloat(renderer, red, green, blue, SDL_ALPHA_OPAQUE_FLOAT); 
+    /* get state caste from void to our type */
+    AppState *as = static_cast<AppState*>(appstate);
+    SDL_FRect r;
 
     /* clear the window. */
-    SDL_RenderClear(renderer);
+    SDL_RenderClear(as->renderer);
+
+    /* draw background color */
+    SDL_SetRenderDrawColor(as->renderer, 255, 255, 255, 255);
+
+    /* draw our character */
+    // first draw color
+    // then position it
+    r.h = 200;
+    r.w = 200;
+    r.x = 250;
+    r.y = 200;
+    SDL_RenderFillRect(as->renderer, &r);    
+    
+    /* now draw background */
+    SDL_SetRenderDrawColor(as->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 
     /* Update screen with any rendering performed since previous call */
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(as->renderer);
 
     return SDL_APP_CONTINUE;
 
@@ -81,4 +117,8 @@ SDL_AppResult SDL_AppIterate(void *appstate){
 */
 void SDL_AppQuit(void *appstate, SDL_AppResult result){
     /* SDL will clean up for us */
+
+    /* delete allocated appstate */
+    AppState *as = static_cast<AppState*>(appstate);
+    delete as;
 }
