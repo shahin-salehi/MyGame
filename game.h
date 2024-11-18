@@ -10,6 +10,7 @@ typedef struct {
     int ypos;
     int h;
     int w;
+    int offset;
 } PlayerContext; 
 
 typedef struct {

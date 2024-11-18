@@ -19,7 +19,7 @@ SDL_AppResult handle_key_event(SDL_Scancode key_code, AppState *as){
     
     /* directions of user */
     case SDL_SCANCODE_RIGHT:
-        if (as->player_context.xpos < as->window_width -10){
+        if (as->player_context.xpos < as->window_width - as->player_context.offset){
             as->player_context.xpos +=10;
         }
         break;
@@ -34,7 +34,7 @@ SDL_AppResult handle_key_event(SDL_Scancode key_code, AppState *as){
         }
         break;
     case SDL_SCANCODE_DOWN: 
-        if (as->player_context.ypos < as->window_height -10){
+        if (as->player_context.ypos < as->window_height - as->player_context.offset){
             as->player_context.ypos +=10;
         }
         break;
