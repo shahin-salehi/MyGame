@@ -42,10 +42,12 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]){
         return SDL_APP_FAILURE;
     }
 
-    // Init our character
+    // init app state
     as->player_context = {"shahin", 250, 250};
     as->player_context.h = 10;
     as->player_context.w = 10;
+    as->window_height = height;
+    as->window_width = width;
 
     return SDL_APP_CONTINUE;
 }
