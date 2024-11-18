@@ -8,6 +8,8 @@ typedef struct {
     std::string name;
     int xpos;
     int ypos;
+    int h;
+    int w;
 } PlayerContext; 
 
 typedef struct {

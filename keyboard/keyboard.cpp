@@ -17,19 +17,15 @@ SDL_AppResult handle_key_event(SDL_Scancode key_code, AppState *as){
     
     /* directions of user */
     case SDL_SCANCODE_RIGHT:
-        SDL_Log("user pressed right arrow");
         as->player_context.xpos +=10;
         break;
     case SDL_SCANCODE_UP:
-        SDL_Log("user pressed up arrow");
         as->player_context.ypos -=10;
         break;
     case SDL_SCANCODE_LEFT:
-        SDL_Log("user pressed left arrow");
         as->player_context.xpos -=10;
         break;
-    case SDL_SCANCODE_DOWN:
-        SDL_Log("user pressed down arrow");
+    case SDL_SCANCODE_DOWN: 
         as->player_context.ypos +=10;
         break;
 
