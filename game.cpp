@@ -49,6 +49,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]){
     as->player_context.offset = 10;
     as->window_height = height;
     as->window_width = width;
+    as->food.is_food = true;
+    as->food.xpos = SDL_rand(width);
+    as->food.ypos = SDL_rand(height);
 
     return SDL_APP_CONTINUE;
 }
@@ -78,24 +81,26 @@ SDL_AppResult SDL_AppIterate(void *appstate){
     /* get state caste from void to our type */
     AppState *as = static_cast<AppState*>(appstate);
     SDL_FRect r;
+    SDL_FRect food_rect;
 
     /* clear the window. */
     SDL_RenderClear(as->renderer);
 
     /* draw background color */
-    SDL_SetRenderDrawColor(as->renderer, 255, 255, 255, 255);
+    SDL_SetRenderDrawColor(as->renderer, 0, 0, 0, 255);
+    SDL_RenderClear(as->renderer);
 
-    /* draw our character */
-    // first draw color
-    // then position it
+    /* draw charcter */
+    
+    //set color
+    SDL_SetRenderDrawColor(as->renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);    
+    // fill shape
     r.h = as->player_context.h;
     r.w = as->player_context.w;
     r.x = as->player_context.xpos;
     r.y = as->player_context.ypos;
-    SDL_RenderFillRect(as->renderer, &r);    
-    
-    /* now draw background */
-    SDL_SetRenderDrawColor(as->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRect(as->renderer, &r);
+
 
     /* Update screen with any rendering performed since previous call */
     SDL_RenderPresent(as->renderer);
