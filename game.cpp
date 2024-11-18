@@ -15,20 +15,6 @@
 static const int width = 1080;
 static const int height = 720;
 
-/*player context*/
-/* initialize send addr to keyboard? */
-typedef struct {
-    std::string name;
-    int xpos;
-    int ypos;
-} PlayerContext; 
-
-typedef struct {
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-    PlayerContext player_context;
-} AppState;
-
 /*
 * This program runs once at startup 
 */
@@ -66,12 +52,15 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]){
 * Handles our events such as mouseclick, keypress etc. 
  */
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event){
+    // cast
+    AppState *as = static_cast<AppState*>(appstate);
+
     //check quit event
     if (event->type == SDL_EVENT_QUIT){
         return SDL_APP_SUCCESS; /* end the program, report success to OS */
     }
     if (event->type == SDL_EVENT_KEY_DOWN){
-        return handle_key_event(event->key.scancode);
+        return handle_key_event(event->key.scancode, as);
     }
     return SDL_APP_CONTINUE; /* carry on with program*/
 }
@@ -96,8 +85,8 @@ SDL_AppResult SDL_AppIterate(void *appstate){
     // then position it
     r.h = 200;
     r.w = 200;
-    r.x = 250;
-    r.y = 200;
+    r.x = as->player_context.xpos;
+    r.y = as->player_context.ypos;
     SDL_RenderFillRect(as->renderer, &r);    
     
     /* now draw background */

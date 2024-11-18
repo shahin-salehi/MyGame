@@ -8,7 +8,7 @@
 
 
 /** handle key press */
-SDL_AppResult handle_key_event(SDL_Scancode key_code){
+SDL_AppResult handle_key_event(SDL_Scancode key_code, AppState *as){
     switch (key_code)
     {
     case SDL_SCANCODE_ESCAPE:
@@ -18,15 +18,19 @@ SDL_AppResult handle_key_event(SDL_Scancode key_code){
     /* directions of user */
     case SDL_SCANCODE_RIGHT:
         SDL_Log("user pressed right arrow");
+        as->player_context.xpos +=10;
         break;
     case SDL_SCANCODE_UP:
         SDL_Log("user pressed up arrow");
+        as->player_context.ypos -=10;
         break;
     case SDL_SCANCODE_LEFT:
         SDL_Log("user pressed left arrow");
+        as->player_context.xpos -=10;
         break;
     case SDL_SCANCODE_DOWN:
         SDL_Log("user pressed down arrow");
+        as->player_context.ypos +=10;
         break;
 
     default:
